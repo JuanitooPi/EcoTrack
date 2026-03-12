@@ -1,0 +1,61 @@
+package com.example.ecotrack;
+
+import android.content.Context;
+import android.content.SharedPreferences;
+
+public class SessionManager {
+    private static final String PREF_NAME = "EcoTrackSession";
+    private static final String KEY_USUARIO_ID = "usuarioId";
+    private static final String KEY_NOMBRE = "nombre";
+    private static final String KEY_EMAIL = "email";
+    private static final String KEY_ROL = "rol";
+    private static final String KEY_IS_LOGGED_IN = "isLoggedIn";
+
+    private SharedPreferences pref;
+    private SharedPreferences.Editor editor;
+    private Context context;
+
+    public SessionManager(Context context) {
+        this.context = context;
+        pref = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        editor = pref.edit();
+    }
+
+    public void crearSesion(Usuario usuario) {
+        editor.putInt(KEY_USUARIO_ID, usuario.getId());
+        editor.putString(KEY_NOMBRE, usuario.getNombre());
+        editor.putString(KEY_EMAIL, usuario.getEmail());
+        editor.putString(KEY_ROL, usuario.getRol());
+        editor.putBoolean(KEY_IS_LOGGED_IN, true);
+        editor.commit();
+    }
+
+    public Usuario getUsuario() {
+        Usuario usuario = new Usuario();
+        usuario.setId(pref.getInt(KEY_USUARIO_ID, -1));
+        usuario.setNombre(pref.getString(KEY_NOMBRE, null));
+        usuario.setEmail(pref.getString(KEY_EMAIL, null));
+        usuario.setRol(pref.getString(KEY_ROL, null));
+        return usuario;
+    }
+
+    public boolean isLoggedIn() {
+        return pref.getBoolean(KEY_IS_LOGGED_IN, false);
+    }
+
+    public void cerrarSesion() {
+        editor.clear();
+        editor.commit();
+    }
+
+    public void actualizarPerfil(String nombre, String email, String rol) {
+        editor.putString(KEY_NOMBRE, nombre);
+        editor.putString(KEY_EMAIL, email);
+        editor.putString(KEY_ROL, rol);
+        editor.commit();
+    }
+
+    public int getUsuarioId() {
+        return pref.getInt(KEY_USUARIO_ID, -1);
+    }
+}

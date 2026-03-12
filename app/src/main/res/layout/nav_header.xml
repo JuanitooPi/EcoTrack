@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="180dp"
+    android:background="@color/green"
+    android:orientation="vertical"
+    android:gravity="center_vertical"
+    android:padding="16dp"
+    android:theme="@style/ThemeOverlay.AppCompat.Dark">
+
+    <!-- Imagen de perfil estática -->
+    <ImageView
+        android:id="@+id/navHeaderImagen"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:src="@drawable/profile_image"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/circle_background_white"
+        android:padding="4dp"
+        android:scaleType="centerCrop"
+        android:contentDescription="Foto de perfil" />
+
+    <TextView
+        android:id="@+id/navHeaderNombre"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Operario ECOLIM"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="@color/white" />
+
+    <TextView
+        android:id="@+id/navHeaderEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="operario@ecolim.com"
+        android:textSize="14sp"
+        android:textColor="@color/white" />
+
+</LinearLayout>

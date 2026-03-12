@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.drawerlayout.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
+
+    <!-- Contenido principal -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <!-- Toolbar mejorada con mayor altura y padding -->
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:minHeight="56dp"
+            android:background="@color/green"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            app:titleTextColor="@color/white"
+            app:title="EcoTrack"
+            app:titleTextAppearance="@style/ToolbarTitleStyle"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            android:clickable="true"
+            android:focusable="true">
+
+            <!-- Área táctil expandida para el menú -->
+            <ImageView
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/ic_menu"
+                android:padding="12dp"
+                android:layout_gravity="start"
+                android:background="?selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:focusable="true"
+                android:id="@+id/menuIcon"
+                android:contentDescription="Menú"/>
+
+        </androidx.appcompat.widget.Toolbar>
+
+        <!-- Contenedor de fragmentos -->
+        <FrameLayout
+            android:id="@+id/container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"/>
+
+    </LinearLayout>
+
+    <!-- Navigation View mejorado -->
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="280dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:fitsSystemWindows="true"
+        app:headerLayout="@layout/nav_header"
+        app:menu="@menu/navigation_menu"
+        app:itemIconTint="@color/green"
+        app:itemTextColor="@color/green"
+        app:itemIconSize="24dp"
+        app:itemTextAppearance="@style/NavigationTextStyle"/>
+
+</androidx.drawerlayout.widget.DrawerLayout>
