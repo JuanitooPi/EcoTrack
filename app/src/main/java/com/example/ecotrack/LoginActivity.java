@@ -65,11 +65,11 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void iniciarSesion() {
-        String usuario = etUsuario.getText().toString().trim();
+        String email = etUsuario.getText().toString().trim();
         String password = etPassword.getText().toString().trim();
 
         // Validar campos vacíos
-        if (TextUtils.isEmpty(usuario)) {
+        if (TextUtils.isEmpty(email)) {
             etUsuario.setError(getString(R.string.error_usuario_vacio));
             return;
         }
@@ -83,19 +83,14 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin.setEnabled(false);
         btnLogin.setText(R.string.iniciando_sesion);
 
-        // Simular validación
+        // Validación real con base de datos
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                // Por ahora usamos credenciales fijas
-                if (usuario.equals("ecolim") && password.equals("123456")) {
-                    // Crear objeto usuario
-                    Usuario user = new Usuario();
-                    user.setId(1);
-                    user.setNombre(getString(R.string.usuario_default_nombre));
-                    user.setEmail(getString(R.string.usuario_default_email));
-                    user.setRol(getString(R.string.usuario_default_rol));
+                // Buscar usuario en la base de datos
+                Usuario user = dbHelper.obtenerUsuarioPorCredenciales(email, password);
 
+                if (user != null) {
                     // Guardar sesión
                     sessionManager.crearSesion(user);
 
