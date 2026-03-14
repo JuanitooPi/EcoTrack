@@ -3,8 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
-    android:padding="16dp">
+    android:background="?android:attr/windowBackground"
+    android:padding="16dp"
+    android:fillViewport="true">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -22,13 +23,14 @@
             android:gravity="center"
             android:layout_marginBottom="24dp"/>
 
-        <!-- Tarjeta de filtros - CORREGIDA -->
+        <!-- Tarjeta de filtros -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             app:cardCornerRadius="12dp"
-            app:cardElevation="4dp">
+            app:cardElevation="4dp"
+            app:cardBackgroundColor="?attr/colorSurface">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -67,7 +69,9 @@
                     android:clickable="true"
                     android:cursorVisible="false"
                     android:background="@drawable/edit_text_background"
-                    android:layout_marginBottom="12dp"/>
+                    android:layout_marginBottom="12dp"
+                    android:textColor="?android:attr/textColorPrimary"
+                    android:textColorHint="?android:attr/textColorSecondary"/>
 
                 <!-- Fecha Fin -->
                 <TextView
@@ -91,7 +95,9 @@
                     android:clickable="true"
                     android:cursorVisible="false"
                     android:background="@drawable/edit_text_background"
-                    android:layout_marginBottom="12dp"/>
+                    android:layout_marginBottom="12dp"
+                    android:textColor="?android:attr/textColorPrimary"
+                    android:textColorHint="?android:attr/textColorSecondary"/>
 
                 <!-- Tipo de Residuo -->
                 <TextView
@@ -114,19 +120,22 @@
                     android:background="@drawable/edit_text_background"
                     android:dropDownVerticalOffset="8dp"
                     android:popupBackground="@drawable/rounded_dropdown_background"
-                    android:inputType="none"/>
+                    android:inputType="none"
+                    android:textColor="?android:attr/textColorPrimary"
+                    android:textColorHint="?android:attr/textColorSecondary"/>
 
             </LinearLayout>
 
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Opciones de formato - CORREGIDA -->
+        <!-- Opciones de formato -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"
             app:cardCornerRadius="12dp"
-            app:cardElevation="4dp">
+            app:cardElevation="4dp"
+            app:cardBackgroundColor="?attr/colorSurface">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -157,7 +166,8 @@
                         android:text="PDF"
                         android:textSize="16sp"
                         android:layout_marginEnd="8dp"
-                        android:backgroundTint="@color/green"/>
+                        android:backgroundTint="@color/green"
+                        android:textColor="@color/white"/>
 
                     <Button
                         android:id="@+id/btnGenerarCSV"
@@ -166,7 +176,8 @@
                         android:layout_weight="1"
                         android:text="CSV"
                         android:textSize="16sp"
-                        android:backgroundTint="@color/green"/>
+                        android:backgroundTint="@color/green"
+                        android:textColor="@color/white"/>
 
                 </LinearLayout>
 
@@ -174,13 +185,14 @@
 
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Resultados - CORREGIDA -->
+        <!-- Resultados -->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cardResultados"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:cardCornerRadius="12dp"
             app:cardElevation="4dp"
+            app:cardBackgroundColor="?attr/colorSurface"
             android:visibility="gone">
 
             <LinearLayout
@@ -204,7 +216,8 @@
                     android:layout_height="wrap_content"
                     android:text=""
                     android:textSize="14sp"
-                    android:layout_marginBottom="16dp"/>
+                    android:layout_marginBottom="16dp"
+                    android:textColor="?android:attr/textColorPrimary"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -220,7 +233,8 @@
                         android:text="Compartir"
                         android:textSize="14sp"
                         android:layout_marginEnd="8dp"
-                        android:backgroundTint="@color/green"/>
+                        android:backgroundTint="@color/green"
+                        android:textColor="@color/white"/>
 
                     <Button
                         android:id="@+id/btnAbrir"
@@ -229,7 +243,8 @@
                         android:layout_weight="1"
                         android:text="Abrir"
                         android:textSize="14sp"
-                        android:backgroundTint="@color/green"/>
+                        android:backgroundTint="@color/green"
+                        android:textColor="@color/white"/>
 
                 </LinearLayout>
 

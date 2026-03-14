@@ -190,9 +190,16 @@ public class PerfilFragment extends Fragment {
                 return;
             }
 
-            // Aquí iría la actualización en BD
-            Toast.makeText(requireContext(), "Contraseña actualizada (simulado)", Toast.LENGTH_SHORT).show();
-            dialog.dismiss();
+            // Actualizar en BD
+            Usuario usuario = sessionManager.getUsuario();
+            boolean exito = dbHelper.cambiarPassword(usuario.getId(), actual, nueva);
+
+            if (exito) {
+                Toast.makeText(requireContext(), "Contraseña actualizada correctamente", Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
+            } else {
+                etPasswordActual.setError("La contraseña actual es incorrecta");
+            }
         });
 
         dialog.show();

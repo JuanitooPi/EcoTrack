@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="?android:attr/windowBackground"
     android:fillViewport="true">
 
     <LinearLayout
@@ -61,7 +61,9 @@
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     app:boxStrokeColor="@color/green"
                     app:boxStrokeWidth="2dp"
-                    app:hintEnabled="false">
+                    app:hintEnabled="false"
+                    app:hintTextColor="@color/green"
+                    android:textColorHint="?android:attr/textColorSecondary">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etNombre"
@@ -71,7 +73,8 @@
                         android:textSize="16sp"
                         android:paddingStart="16dp"
                         android:paddingEnd="16dp"
-                        android:inputType="textPersonName"/>
+                        android:inputType="textPersonName"
+                        android:textColor="?android:attr/textColorPrimary"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <!-- Correo electrónico -->
@@ -90,7 +93,9 @@
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     app:boxStrokeColor="@color/green"
                     app:boxStrokeWidth="2dp"
-                    app:hintEnabled="false">
+                    app:hintEnabled="false"
+                    app:hintTextColor="@color/green"
+                    android:textColorHint="?android:attr/textColorSecondary">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etEmail"
@@ -100,7 +105,8 @@
                         android:textSize="16sp"
                         android:paddingStart="16dp"
                         android:paddingEnd="16dp"
-                        android:inputType="textEmailAddress"/>
+                        android:inputType="textEmailAddress"
+                        android:textColor="?android:attr/textColorPrimary"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <!-- Usuario -->
@@ -119,7 +125,9 @@
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     app:boxStrokeColor="@color/green"
                     app:boxStrokeWidth="2dp"
-                    app:hintEnabled="false">
+                    app:hintEnabled="false"
+                    app:hintTextColor="@color/green"
+                    android:textColorHint="?android:attr/textColorSecondary">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etUsuario"
@@ -129,7 +137,8 @@
                         android:textSize="16sp"
                         android:paddingStart="16dp"
                         android:paddingEnd="16dp"
-                        android:inputType="text"/>
+                        android:inputType="text"
+                        android:textColor="?android:attr/textColorPrimary"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <!-- Contraseña -->
@@ -149,7 +158,10 @@
                     app:passwordToggleEnabled="true"
                     app:boxStrokeColor="@color/green"
                     app:boxStrokeWidth="2dp"
-                    app:hintEnabled="false">
+                    app:hintEnabled="false"
+                    app:hintTextColor="@color/green"
+                    android:textColorHint="?android:attr/textColorSecondary"
+                    app:passwordToggleTint="?android:attr/textColorSecondary">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etPassword"
@@ -159,7 +171,8 @@
                         android:textSize="16sp"
                         android:paddingStart="16dp"
                         android:paddingEnd="16dp"
-                        android:inputType="textPassword"/>
+                        android:inputType="textPassword"
+                        android:textColor="?android:attr/textColorPrimary"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <!-- Confirmar contraseña -->
@@ -179,7 +192,10 @@
                     app:passwordToggleEnabled="true"
                     app:boxStrokeColor="@color/green"
                     app:boxStrokeWidth="2dp"
-                    app:hintEnabled="false">
+                    app:hintEnabled="false"
+                    app:hintTextColor="@color/green"
+                    android:textColorHint="?android:attr/textColorSecondary"
+                    app:passwordToggleTint="?android:attr/textColorSecondary">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etConfirmPassword"
@@ -189,7 +205,8 @@
                         android:textSize="16sp"
                         android:paddingStart="16dp"
                         android:paddingEnd="16dp"
-                        android:inputType="textPassword"/>
+                        android:inputType="textPassword"
+                        android:textColor="?android:attr/textColorPrimary"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
@@ -206,7 +223,8 @@
             android:textAllCaps="false"
             android:layout_marginBottom="16dp"
             app:cornerRadius="8dp"
-            app:backgroundTint="@color/green"/>
+            app:backgroundTint="@color/green"
+            android:textColor="@color/white"/>
 
         <!-- ProgressBar -->
         <ProgressBar
@@ -229,7 +247,7 @@
                 android:layout_height="wrap_content"
                 android:text="¿Ya tienes una cuenta? "
                 android:textSize="14sp"
-                android:textColor="@android:color/darker_gray"/>
+                android:textColor="?android:attr/textColorSecondary"/>
 
             <TextView
                 android:id="@+id/tvIniciarSesion"
