@@ -33,7 +33,7 @@
         app:boxStrokeColor="@color/green"
         app:boxStrokeWidth="2dp"
         app:hintTextColor="@color/green"
-        app:defaultHintTextColor="?android:attr/textColorSecondary">
+        android:textColorHint="?android:attr/textColorSecondary">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etUsuario"
@@ -56,7 +56,7 @@
         app:boxStrokeColor="@color/green"
         app:boxStrokeWidth="2dp"
         app:hintTextColor="@color/green"
-        app:defaultHintTextColor="?android:attr/textColorSecondary"
+        android:textColorHint="?android:attr/textColorSecondary"
         app:passwordToggleTint="?android:attr/textColorSecondary">
 
         <com.google.android.material.textfield.TextInputEditText

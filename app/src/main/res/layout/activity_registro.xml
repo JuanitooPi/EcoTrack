@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="?android:attr/windowBackground"
     android:fillViewport="true">
 
     <LinearLayout
@@ -29,7 +29,7 @@
             android:layout_height="wrap_content"
             app:cardCornerRadius="12dp"
             app:cardElevation="4dp"
-            app:cardBackgroundColor="@color/white"
+            app:cardBackgroundColor="?attr/colorSurface"
             android:layout_marginBottom="16dp">
 
             <LinearLayout
@@ -38,7 +38,7 @@
                 android:orientation="vertical"
                 android:padding="20dp">
 
-                <!-- Tipo de Residuo (MEJORADO) -->
+                <!-- Tipo de Residuo -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -57,7 +57,8 @@
                     app:endIconMode="dropdown_menu"
                     app:boxStrokeColor="@color/green"
                     app:boxStrokeWidth="2dp"
-                    app:hintEnabled="false">
+                    app:hintEnabled="false"
+                    android:textColorHint="?android:attr/textColorSecondary">
 
                     <com.google.android.material.textfield.MaterialAutoCompleteTextView
                         android:id="@+id/actTipo"
@@ -70,7 +71,8 @@
                         android:background="@android:color/transparent"
                         android:dropDownVerticalOffset="8dp"
                         android:popupBackground="@drawable/rounded_dropdown_background"
-                        android:inputType="none"/>
+                        android:inputType="none"
+                        android:textColor="?android:attr/textColorPrimary"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <!-- Cantidad -->
@@ -91,7 +93,8 @@
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     app:boxStrokeColor="@color/green"
                     app:boxStrokeWidth="2dp"
-                    app:hintEnabled="false">
+                    app:hintEnabled="false"
+                    android:textColorHint="?android:attr/textColorSecondary">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etCantidad"
@@ -101,10 +104,11 @@
                         android:textSize="16sp"
                         android:paddingStart="16dp"
                         android:paddingEnd="16dp"
-                        android:inputType="numberDecimal"/>
+                        android:inputType="numberDecimal"
+                        android:textColor="?android:attr/textColorPrimary"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <!-- Unidad de Medida (MEJORADO) -->
+                <!-- Unidad de Medida -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -123,7 +127,8 @@
                     app:endIconMode="dropdown_menu"
                     app:boxStrokeColor="@color/green"
                     app:boxStrokeWidth="2dp"
-                    app:hintEnabled="false">
+                    app:hintEnabled="false"
+                    android:textColorHint="?android:attr/textColorSecondary">
 
                     <com.google.android.material.textfield.MaterialAutoCompleteTextView
                         android:id="@+id/actUnidad"
@@ -136,7 +141,8 @@
                         android:background="@android:color/transparent"
                         android:dropDownVerticalOffset="8dp"
                         android:popupBackground="@drawable/rounded_dropdown_background"
-                        android:inputType="none"/>
+                        android:inputType="none"
+                        android:textColor="?android:attr/textColorPrimary"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <!-- Fecha -->
@@ -160,7 +166,8 @@
                     app:endIconTint="@color/green"
                     app:boxStrokeColor="@color/green"
                     app:boxStrokeWidth="2dp"
-                    app:hintEnabled="false">
+                    app:hintEnabled="false"
+                    android:textColorHint="?android:attr/textColorSecondary">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etFecha"
@@ -173,7 +180,8 @@
                         android:focusable="false"
                         android:clickable="true"
                         android:cursorVisible="false"
-                        android:background="@android:color/transparent"/>
+                        android:background="@android:color/transparent"
+                        android:textColor="?android:attr/textColorPrimary"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <!-- Hora -->
@@ -197,7 +205,8 @@
                     app:endIconTint="@color/green"
                     app:boxStrokeColor="@color/green"
                     app:boxStrokeWidth="2dp"
-                    app:hintEnabled="false">
+                    app:hintEnabled="false"
+                    android:textColorHint="?android:attr/textColorSecondary">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etHora"
@@ -210,7 +219,8 @@
                         android:focusable="false"
                         android:clickable="true"
                         android:cursorVisible="false"
-                        android:background="@android:color/transparent"/>
+                        android:background="@android:color/transparent"
+                        android:textColor="?android:attr/textColorPrimary"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <!-- Ubicación -->
@@ -231,7 +241,8 @@
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     app:boxStrokeColor="@color/green"
                     app:boxStrokeWidth="2dp"
-                    app:hintEnabled="false">
+                    app:hintEnabled="false"
+                    android:textColorHint="?android:attr/textColorSecondary">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etUbicacion"
@@ -241,7 +252,8 @@
                         android:textSize="16sp"
                         android:paddingStart="16dp"
                         android:paddingEnd="16dp"
-                        android:inputType="text"/>
+                        android:inputType="text"
+                        android:textColor="?android:attr/textColorPrimary"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
@@ -265,7 +277,8 @@
                 android:textAllCaps="false"
                 android:layout_marginEnd="8dp"
                 app:cornerRadius="8dp"
-                app:backgroundTint="@color/green"/>
+                app:backgroundTint="@color/green"
+                android:textColor="@color/white"/>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnCancelar"
@@ -277,6 +290,7 @@
                 android:textAllCaps="false"
                 app:cornerRadius="8dp"
                 app:backgroundTint="@android:color/darker_gray"
+                android:textColor="@color/white"
                 style="@style/Widget.MaterialComponents.Button"/>
 
         </LinearLayout>

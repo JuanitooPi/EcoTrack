@@ -63,7 +63,7 @@
                     app:boxStrokeWidth="2dp"
                     app:hintEnabled="false"
                     app:hintTextColor="@color/green"
-                    app:defaultHintTextColor="?android:attr/textColorSecondary">
+                    android:textColorHint="?android:attr/textColorSecondary">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etNombre"
@@ -95,7 +95,7 @@
                     app:boxStrokeWidth="2dp"
                     app:hintEnabled="false"
                     app:hintTextColor="@color/green"
-                    app:defaultHintTextColor="?android:attr/textColorSecondary">
+                    android:textColorHint="?android:attr/textColorSecondary">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etEmail"
@@ -127,7 +127,7 @@
                     app:boxStrokeWidth="2dp"
                     app:hintEnabled="false"
                     app:hintTextColor="@color/green"
-                    app:defaultHintTextColor="?android:attr/textColorSecondary">
+                    android:textColorHint="?android:attr/textColorSecondary">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etUsuario"
@@ -160,7 +160,7 @@
                     app:boxStrokeWidth="2dp"
                     app:hintEnabled="false"
                     app:hintTextColor="@color/green"
-                    app:defaultHintTextColor="?android:attr/textColorSecondary"
+                    android:textColorHint="?android:attr/textColorSecondary"
                     app:passwordToggleTint="?android:attr/textColorSecondary">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -194,7 +194,7 @@
                     app:boxStrokeWidth="2dp"
                     app:hintEnabled="false"
                     app:hintTextColor="@color/green"
-                    app:defaultHintTextColor="?android:attr/textColorSecondary"
+                    android:textColorHint="?android:attr/textColorSecondary"
                     app:passwordToggleTint="?android:attr/textColorSecondary">
 
                     <com.google.android.material.textfield.TextInputEditText
