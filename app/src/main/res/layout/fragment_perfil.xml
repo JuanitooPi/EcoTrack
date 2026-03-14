@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="?android:attr/windowBackground"
     android:padding="16dp">
 
     <LinearLayout
@@ -37,16 +37,17 @@
                 android:gravity="center_horizontal"
                 android:padding="24dp">
 
-                <!-- Foto de perfil (placeholder) -->
-                <!-- Foto de perfil estática -->
-                <ImageView
+                <!-- Foto de perfil circular -->
+                <com.google.android.material.imageview.ShapeableImageView
                     android:id="@+id/imagenPerfil"
                     android:layout_width="120dp"
                     android:layout_height="120dp"
                     android:src="@drawable/profile_image"
                     android:layout_marginBottom="16dp"
-                    android:background="@drawable/circle_background"
-                    android:padding="4dp"
+                    android:padding="2dp"
+                    app:strokeColor="@color/green"
+                    app:strokeWidth="2dp"
+                    app:shapeAppearanceOverlay="@style/ShapeAppearance.EcoTrack.Circle"
                     android:scaleType="centerCrop"/>
 
                 <!-- Nombre -->
@@ -146,6 +147,55 @@
 
             </LinearLayout>
 
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Configuración de Tema -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="4dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Tema de la aplicación"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="8dp"/>
+
+                <RadioGroup
+                    android:id="@+id/rgTema"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <RadioButton
+                        android:id="@+id/rbSistema"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Predeterminado del sistema" />
+
+                    <RadioButton
+                        android:id="@+id/rbClaro"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Claro" />
+
+                    <RadioButton
+                        android:id="@+id/rbOscuro"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Oscuro" />
+                </RadioGroup>
+            </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
         <!-- Botones de acción -->

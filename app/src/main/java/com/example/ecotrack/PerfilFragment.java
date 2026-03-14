@@ -8,15 +8,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
 
 public class PerfilFragment extends Fragment {
 
     private TextView tvNombre, tvRol, tvEmail, tvTotalRegistros, tvTotalKg;
     private Button btnEditarPerfil, btnCambiarPassword, btnCerrarSesion;
+    private RadioGroup rgTema;
+    private RadioButton rbSistema, rbClaro, rbOscuro;
     private SessionManager sessionManager;
     private DatabaseHelper dbHelper;
     private ResiduoDAO residuoDAO;
@@ -29,6 +34,7 @@ public class PerfilFragment extends Fragment {
         initViews(view);
         initDatabase();
         cargarDatosPerfil();
+        setupThemeSelection();
         setupListeners();
 
         return view;
@@ -43,12 +49,40 @@ public class PerfilFragment extends Fragment {
         btnEditarPerfil = view.findViewById(R.id.btnEditarPerfil);
         btnCambiarPassword = view.findViewById(R.id.btnCambiarPassword);
         btnCerrarSesion = view.findViewById(R.id.btnCerrarSesion);
+        rgTema = view.findViewById(R.id.rgTema);
+        rbSistema = view.findViewById(R.id.rbSistema);
+        rbClaro = view.findViewById(R.id.rbClaro);
+        rbOscuro = view.findViewById(R.id.rbOscuro);
     }
 
     private void initDatabase() {
         sessionManager = new SessionManager(requireContext());
         dbHelper = new DatabaseHelper(requireContext());
         residuoDAO = new ResiduoDAO(dbHelper);
+    }
+
+    private void setupThemeSelection() {
+        int currentMode = sessionManager.getThemeMode();
+        if (currentMode == AppCompatDelegate.MODE_NIGHT_YES) {
+            rbOscuro.setChecked(true);
+        } else if (currentMode == AppCompatDelegate.MODE_NIGHT_NO) {
+            rbClaro.setChecked(true);
+        } else {
+            rbSistema.setChecked(true);
+        }
+
+        rgTema.setOnCheckedChangeListener((group, checkedId) -> {
+            int mode;
+            if (checkedId == R.id.rbClaro) {
+                mode = AppCompatDelegate.MODE_NIGHT_NO;
+            } else if (checkedId == R.id.rbOscuro) {
+                mode = AppCompatDelegate.MODE_NIGHT_YES;
+            } else {
+                mode = AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM;
+            }
+            sessionManager.setThemeMode(mode);
+            AppCompatDelegate.setDefaultNightMode(mode);
+        });
     }
 
     private void setupListeners() {

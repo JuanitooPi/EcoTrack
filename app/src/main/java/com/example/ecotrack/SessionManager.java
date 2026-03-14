@@ -2,6 +2,7 @@ package com.example.ecotrack;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import androidx.appcompat.app.AppCompatDelegate;
 
 public class SessionManager {
     private static final String PREF_NAME = "EcoTrackSession";
@@ -10,6 +11,7 @@ public class SessionManager {
     private static final String KEY_EMAIL = "email";
     private static final String KEY_ROL = "rol";
     private static final String KEY_IS_LOGGED_IN = "isLoggedIn";
+    private static final String KEY_THEME = "theme_mode";
 
     private SharedPreferences pref;
     private SharedPreferences.Editor editor;
@@ -57,5 +59,18 @@ public class SessionManager {
 
     public int getUsuarioId() {
         return pref.getInt(KEY_USUARIO_ID, -1);
+    }
+
+    public void setThemeMode(int mode) {
+        editor.putInt(KEY_THEME, mode);
+        editor.apply();
+    }
+
+    public int getThemeMode() {
+        return pref.getInt(KEY_THEME, AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+    }
+
+    public void applyTheme() {
+        AppCompatDelegate.setDefaultNightMode(getThemeMode());
     }
 }
