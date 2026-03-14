@@ -19,7 +19,8 @@ public class Residuo {
             "Orgánico",
             "Peligroso",
             "Electrónico",
-            "Textil"
+            "Textil",
+            "Otro..."
     };
 
     // Unidades de medida
@@ -48,69 +49,29 @@ public class Residuo {
     }
 
     // Getters y Setters
-    public int getId() {
-        return id;
-    }
+    public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
 
-    public void setId(int id) {
-        this.id = id;
-    }
+    public String getTipo() { return tipo; }
+    public void setTipo(String tipo) { this.tipo = tipo; }
 
-    public String getTipo() {
-        return tipo;
-    }
+    public double getCantidad() { return cantidad; }
+    public void setCantidad(double cantidad) { this.cantidad = cantidad; }
 
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
-    }
+    public String getUnidad() { return unidad; }
+    public void setUnidad(String unidad) { this.unidad = unidad; }
 
-    public double getCantidad() {
-        return cantidad;
-    }
+    public String getFecha() { return fecha; }
+    public void setFecha(String fecha) { this.fecha = fecha; }
 
-    public void setCantidad(double cantidad) {
-        this.cantidad = cantidad;
-    }
+    public String getHora() { return hora; }
+    public void setHora(String hora) { this.hora = hora; }
 
-    public String getUnidad() {
-        return unidad;
-    }
+    public String getUbicacion() { return ubicacion; }
+    public void setUbicacion(String ubicacion) { this.ubicacion = ubicacion; }
 
-    public void setUnidad(String unidad) {
-        this.unidad = unidad;
-    }
-
-    public String getFecha() {
-        return fecha;
-    }
-
-    public void setFecha(String fecha) {
-        this.fecha = fecha;
-    }
-
-    public String getHora() {
-        return hora;
-    }
-
-    public void setHora(String hora) {
-        this.hora = hora;
-    }
-
-    public String getUbicacion() {
-        return ubicacion;
-    }
-
-    public void setUbicacion(String ubicacion) {
-        this.ubicacion = ubicacion;
-    }
-
-    public int getSincronizado() {
-        return sincronizado;
-    }
-
-    public void setSincronizado(int sincronizado) {
-        this.sincronizado = sincronizado;
-    }
+    public int getSincronizado() { return sincronizado; }
+    public void setSincronizado(int sincronizado) { this.sincronizado = sincronizado; }
 
     @Override
     public String toString() {

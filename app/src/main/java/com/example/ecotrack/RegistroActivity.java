@@ -10,25 +10,33 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.material.textfield.TextInputLayout;
+
 import java.util.Calendar;
 
 public class RegistroActivity extends AppCompatActivity {
 
     private DatabaseHelper dbHelper;
     private ResiduoDAO residuoDAO;
+    private SessionManager sessionManager;
 
     private AutoCompleteTextView actTipo, actUnidad;
-    private EditText etCantidad, etFecha, etHora, etUbicacion;
+    private EditText etCantidad, etFecha, etHora, etUbicacion, etOtroTipo;
+    private TextInputLayout tilOtroTipo;
     private Button btnGuardar, btnCancelar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        sessionManager = new SessionManager(this);
+        sessionManager.applyTheme();
+        
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registro);
 
         initViews();
         initDatabase();
-        setupSpinners();  // IMPORTANTE: Configurar los spinners
+        setupSpinners();
         setupDateTimePickers();
         setupButtons();
 
@@ -44,6 +52,8 @@ public class RegistroActivity extends AppCompatActivity {
         etFecha = findViewById(R.id.etFecha);
         etHora = findViewById(R.id.etHora);
         etUbicacion = findViewById(R.id.etUbicacion);
+        etOtroTipo = findViewById(R.id.etOtroTipo);
+        tilOtroTipo = findViewById(R.id.tilOtroTipo);
         btnGuardar = findViewById(R.id.btnGuardar);
         btnCancelar = findViewById(R.id.btnCancelar);
     }
@@ -54,7 +64,6 @@ public class RegistroActivity extends AppCompatActivity {
     }
 
     private void setupSpinners() {
-        // Configurar spinner de tipos de residuos
         ArrayAdapter<String> tipoAdapter = new ArrayAdapter<>(
                 this,
                 android.R.layout.simple_dropdown_item_1line,
@@ -62,35 +71,26 @@ public class RegistroActivity extends AppCompatActivity {
         );
         actTipo.setAdapter(tipoAdapter);
 
-        // Hacer que el dropdown se muestre inmediatamente al hacer clic
-        actTipo.setOnClickListener(v -> {
-            actTipo.showDropDown();
-        });
-
-        // También al enfocar
-        actTipo.setOnFocusChangeListener((v, hasFocus) -> {
-            if (hasFocus) {
-                actTipo.showDropDown();
+        // Listener para detectar si elige "Otro..."
+        actTipo.setOnItemClickListener((parent, view, position, id) -> {
+            String seleccion = (String) parent.getItemAtPosition(position);
+            if ("Otro...".equals(seleccion)) {
+                tilOtroTipo.setVisibility(View.VISIBLE);
+                etOtroTipo.requestFocus();
+            } else {
+                tilOtroTipo.setVisibility(View.GONE);
             }
         });
 
-        // Configurar spinner de unidades de medida
+        actTipo.setOnClickListener(v -> actTipo.showDropDown());
+
         ArrayAdapter<String> unidadAdapter = new ArrayAdapter<>(
                 this,
                 android.R.layout.simple_dropdown_item_1line,
                 Residuo.UNIDADES
         );
         actUnidad.setAdapter(unidadAdapter);
-
-        actUnidad.setOnClickListener(v -> {
-            actUnidad.showDropDown();
-        });
-
-        actUnidad.setOnFocusChangeListener((v, hasFocus) -> {
-            if (hasFocus) {
-                actUnidad.showDropDown();
-            }
-        });
+        actUnidad.setOnClickListener(v -> actUnidad.showDropDown());
     }
 
     private void setupDateTimePickers() {
@@ -130,56 +130,44 @@ public class RegistroActivity extends AppCompatActivity {
     }
 
     private void guardarRegistro() {
-        // Validar campos
-        String tipo = actTipo.getText().toString();
+        String tipoFinal = actTipo.getText().toString();
         String unidad = actUnidad.getText().toString();
         String cantidadStr = etCantidad.getText().toString();
         String fecha = etFecha.getText().toString();
         String hora = etHora.getText().toString();
         String ubicacion = etUbicacion.getText().toString();
 
-        if (tipo.isEmpty()) {
-            actTipo.setError("Seleccione un tipo");
-            actTipo.requestFocus();
-            return;
+        // Si eligió "Otro...", el tipo real es lo que escribió en etOtroTipo
+        if ("Otro...".equals(tipoFinal)) {
+            tipoFinal = etOtroTipo.getText().toString().trim();
+            if (tipoFinal.isEmpty()) {
+                etOtroTipo.setError("Especifique el tipo de residuo");
+                return;
+            }
         }
 
-        if (unidad.isEmpty()) {
-            actUnidad.setError("Seleccione una unidad");
-            actUnidad.requestFocus();
+        if (tipoFinal.isEmpty() || "Seleccione tipo".equals(tipoFinal)) {
+            Toast.makeText(this, "Seleccione un tipo de residuo", Toast.LENGTH_SHORT).show();
             return;
         }
 
         if (cantidadStr.isEmpty()) {
             etCantidad.setError("Ingrese cantidad");
-            etCantidad.requestFocus();
             return;
         }
 
-        double cantidad;
-        try {
-            cantidad = Double.parseDouble(cantidadStr);
-            if (cantidad <= 0) {
-                etCantidad.setError("La cantidad debe ser mayor a 0");
-                etCantidad.requestFocus();
-                return;
-            }
-        } catch (NumberFormatException e) {
-            etCantidad.setError("Cantidad inválida");
-            etCantidad.requestFocus();
-            return;
-        }
-
-        // Convertir fecha a formato BD
+        double cantidad = Double.parseDouble(cantidadStr);
         String fechaBD = DateUtils.formatearFechaBD(fecha);
 
-        // Crear y guardar residuo
-        Residuo residuo = new Residuo(tipo, cantidad, unidad, fechaBD, hora, ubicacion);
-        long id = residuoDAO.insertar(residuo);
+        Residuo residuo = new Residuo(tipoFinal, cantidad, unidad, fechaBD, hora, ubicacion);
+        
+        // Usar el ID del usuario actual de la sesión
+        int usuarioId = sessionManager.getUsuarioId();
+        long id = dbHelper.insertarResiduo(residuo, usuarioId);
 
         if (id != -1) {
             Toast.makeText(this, "Registro guardado exitosamente", Toast.LENGTH_SHORT).show();
-            finish(); // Volver a la actividad anterior
+            finish();
         } else {
             Toast.makeText(this, "Error al guardar el registro", Toast.LENGTH_SHORT).show();
         }

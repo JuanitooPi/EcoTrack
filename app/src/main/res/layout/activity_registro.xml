@@ -52,7 +52,7 @@
                     android:id="@+id/tilTipo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
+                    android:layout_marginBottom="8dp"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     app:endIconMode="dropdown_menu"
                     app:boxStrokeColor="@color/green"
@@ -73,6 +73,30 @@
                         android:dropDownVerticalOffset="8dp"
                         android:popupBackground="?attr/colorSurface"
                         android:inputType="none"
+                        android:textColor="?android:attr/textColorPrimary"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Campo para nuevo tipo (se muestra si se elige "Otro...") -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilOtroTipo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:visibility="gone"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    app:boxStrokeColor="@color/green"
+                    app:boxStrokeWidth="2dp"
+                    app:hintEnabled="false">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etOtroTipo"
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:hint="Escriba el nuevo tipo"
+                        android:textSize="16sp"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        android:inputType="text"
                         android:textColor="?android:attr/textColorPrimary"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
