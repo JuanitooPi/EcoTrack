@@ -28,6 +28,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // Aplicar tema antes de onCreate y setContentView
+        sessionManager = new SessionManager(this);
+        sessionManager.applyTheme();
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -52,7 +56,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView = findViewById(R.id.nav_view);
         toolbar = findViewById(R.id.toolbar);
         menuIcon = findViewById(R.id.menuIcon);
-        sessionManager = new SessionManager(this);
     }
 
     private void setupToolbar() {

@@ -24,6 +24,10 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // Aplicar tema antes de onCreate y setContentView
+        sessionManager = new SessionManager(this);
+        sessionManager.applyTheme();
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
@@ -61,7 +65,6 @@ public class LoginActivity extends AppCompatActivity {
 
     private void initDatabase() {
         dbHelper = new DatabaseHelper(this);
-        sessionManager = new SessionManager(this);
     }
 
     private void iniciarSesion() {

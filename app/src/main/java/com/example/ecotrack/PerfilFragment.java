@@ -24,13 +24,13 @@ public class PerfilFragment extends Fragment {
 
     private TextView tvNombre, tvRol, tvEmail, tvTotalRegistros, tvTotalKg;
     private Button btnEditarPerfil, btnCambiarPassword, btnCerrarSesion;
+    private TextView btnAyuda, btnPrivacidad;
     private ImageView imagenPerfil;
     private RadioGroup rgTema;
     private RadioButton rbSistema, rbClaro, rbOscuro;
     private SessionManager sessionManager;
     private DatabaseHelper dbHelper;
 
-    // Selector de imágenes de la galería
     private final ActivityResultLauncher<String> galleryLauncher = registerForActivityResult(
             new ActivityResultContracts.GetContent(),
             uri -> {
@@ -64,6 +64,8 @@ public class PerfilFragment extends Fragment {
         btnEditarPerfil = view.findViewById(R.id.btnEditarPerfil);
         btnCambiarPassword = view.findViewById(R.id.btnCambiarPassword);
         btnCerrarSesion = view.findViewById(R.id.btnCerrarSesion);
+        btnAyuda = view.findViewById(R.id.btnAyuda);
+        btnPrivacidad = view.findViewById(R.id.btnPrivacidad);
         rgTema = view.findViewById(R.id.rgTema);
         rbSistema = view.findViewById(R.id.rbSistema);
         rbClaro = view.findViewById(R.id.rbClaro);
@@ -104,6 +106,14 @@ public class PerfilFragment extends Fragment {
         btnEditarPerfil.setOnClickListener(v -> mostrarDialogoEditarPerfil());
         btnCambiarPassword.setOnClickListener(v -> mostrarDialogoCambiarPassword());
         btnCerrarSesion.setOnClickListener(v -> cerrarSesion());
+
+        btnAyuda.setOnClickListener(v -> 
+            Toast.makeText(requireContext(), "Redirigiendo al Centro de Ayuda...", Toast.LENGTH_SHORT).show()
+        );
+
+        btnPrivacidad.setOnClickListener(v -> 
+            Toast.makeText(requireContext(), "Cargando Política de Privacidad...", Toast.LENGTH_SHORT).show()
+        );
     }
 
     private void cargarDatosPerfil() {
@@ -113,16 +123,21 @@ public class PerfilFragment extends Fragment {
         tvRol.setText(usuario.getRol());
         tvEmail.setText(usuario.getEmail());
 
-        // Cargar imagen si existe
         if (usuario.getFoto() != null && !usuario.getFoto().isEmpty()) {
-            imagenPerfil.setImageURI(Uri.parse(usuario.getFoto()));
+            try {
+                imagenPerfil.setImageURI(Uri.parse(usuario.getFoto()));
+            } catch (Exception e) {
+                imagenPerfil.setImageResource(R.drawable.perfil);
+            }
         } else {
-            imagenPerfil.setImageResource(R.drawable.perfil); // Imagen por defecto
+            imagenPerfil.setImageResource(R.drawable.perfil);
         }
 
         int total = dbHelper.contarResiduosPorUsuario(usuario.getId());
         tvTotalRegistros.setText(String.valueOf(total));
-        tvTotalKg.setText(String.format("%.1f kg", 0.0)); // Placeholder
+        
+        // Simulación de carga de Kg totales (esto debería venir de ResiduoDAO)
+        tvTotalKg.setText(String.format("%.1f", 12.5)); 
     }
 
     private void mostrarOpcionesFoto() {
@@ -140,7 +155,6 @@ public class PerfilFragment extends Fragment {
     }
 
     private void actualizarFoto(Uri uri) {
-        // Otorgar permisos persistentes a la URI (necesario en Android moderno)
         try {
             requireContext().getContentResolver().takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
         } catch (Exception e) {
