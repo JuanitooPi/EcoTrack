@@ -130,8 +130,9 @@ public class RegisterActivity extends AppCompatActivity {
             btnRegistrar.setText("Registrarse");
 
             if (id != -1) {
+                dbHelper.verificarUsuarios(); // <-- AGREGAR ESTA LÍNEA
                 Toast.makeText(RegisterActivity.this,
-                        "Registro exitoso. Ya puede iniciar sesión",
+                        "Registro exitoso. ID: " + id, // Mostrar ID para verificar
                         Toast.LENGTH_LONG).show();
                 finish(); // Volver al login
             } else {
