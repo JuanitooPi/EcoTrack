@@ -125,27 +125,29 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     /**
-     * Obtener usuario por email y password (login)
+     * Obtener usuario por nombre de usuario y password (login)
      */
-    public Usuario obtenerUsuarioPorCredenciales(String email, String password) {
+    public Usuario obtenerUsuarioPorCredenciales(String usuario, String password) {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.query(TABLE_USUARIOS, null,
-                COLUMN_EMAIL + " = ? AND " + COLUMN_PASSWORD + " = ?",
-                new String[]{email, password}, null, null, null);
 
-        Usuario usuario = null;
+        // Buscar por nombre de usuario (COLUMN_NOMBRE) y password
+        Cursor cursor = db.query(TABLE_USUARIOS, null,
+                COLUMN_NOMBRE + " = ? AND " + COLUMN_PASSWORD + " = ?",
+                new String[]{usuario, password}, null, null, null);
+
+        Usuario user = null;
         if (cursor.moveToFirst()) {
-            usuario = new Usuario();
-            usuario.setId(cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_USUARIO_ID)));
-            usuario.setNombre(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NOMBRE)));
-            usuario.setEmail(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_EMAIL)));
-            usuario.setRol(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_ROL)));
-            usuario.setPassword(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_PASSWORD)));
-            usuario.setFoto(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_FOTO)));
+            user = new Usuario();
+            user.setId(cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_USUARIO_ID)));
+            user.setNombre(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NOMBRE)));
+            user.setEmail(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_EMAIL)));
+            user.setRol(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_ROL)));
+            user.setPassword(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_PASSWORD)));
+            user.setFoto(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_FOTO)));
         }
         cursor.close();
         db.close();
-        return usuario;
+        return user;
     }
 
     /**
@@ -565,5 +567,26 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Deprecated
     public void eliminarResiduo(int id) {
         eliminarResiduo(id, 1);
+    }
+    /**
+     * MÉTODO TEMPORAL PARA DEPURACIÓN
+     * Verificar qué usuarios hay en la base de datos
+     */
+    public void verificarUsuarios() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_USUARIOS, null);
+
+        android.util.Log.d("DB_DEBUG", "=== USUARIOS EN BD ===");
+        android.util.Log.d("DB_DEBUG", "Total: " + cursor.getCount());
+
+        while (cursor.moveToNext()) {
+            String nombre = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NOMBRE));
+            String email = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_EMAIL));
+            String pass = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_PASSWORD));
+            android.util.Log.d("DB_DEBUG", "Usuario: " + nombre + " | Email: " + email + " | Pass: " + pass);
+        }
+
+        cursor.close();
+        db.close();
     }
 }

@@ -83,31 +83,37 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin.setEnabled(false);
         btnLogin.setText(R.string.iniciando_sesion);
 
-        // Simular validación
+        // Simular proceso de autenticación
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                // Por ahora usamos credenciales fijas
-                if (usuario.equals("ecolim") && password.equals("123456")) {
-                    // Crear objeto usuario
-                    Usuario user = new Usuario();
-                    user.setId(1);
-                    user.setNombre(getString(R.string.usuario_default_nombre));
-                    user.setEmail(getString(R.string.usuario_default_email));
-                    user.setRol(getString(R.string.usuario_default_rol));
+                // CONSULTAR EN LA BASE DE DATOS
+                Usuario user = dbHelper.obtenerUsuarioPorCredenciales(usuario, password);
 
-                    // Guardar sesión
+                if (user != null) {
+                    // Login exitoso
                     sessionManager.crearSesion(user);
 
-                    Toast.makeText(LoginActivity.this,
-                            getString(R.string.bienvenido, user.getNombre()),
-                            Toast.LENGTH_SHORT).show();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(LoginActivity.this,
+                                    getString(R.string.bienvenido, user.getNombre()),
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    });
                     irAlDashboard();
                 } else {
-                    tvMensaje.setVisibility(View.VISIBLE);
-                    tvMensaje.setText(R.string.error_credenciales);
-                    btnLogin.setEnabled(true);
-                    btnLogin.setText(R.string.iniciar_sesion);
+                    // Login fallido
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            tvMensaje.setVisibility(View.VISIBLE);
+                            tvMensaje.setText(R.string.error_credenciales);
+                            btnLogin.setEnabled(true);
+                            btnLogin.setText(R.string.iniciar_sesion);
+                        }
+                    });
                 }
             }
         }, 1500);
