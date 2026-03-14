@@ -1,10 +1,15 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Tema principal de la aplicación -->
     <style name="Theme.EcoTrack" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="colorPrimary">@color/green</item>
         <item name="colorPrimaryVariant">@color/green</item>
         <item name="colorOnPrimary">@color/white</item>
         <item name="colorSecondary">@color/green</item>
         <item name="android:statusBarColor">@color/green</item>
+
+        <!-- Estas líneas desactivan el Splash Screen por defecto de Android 12+ -->
+        <item name="android:windowSplashScreenBackground" tools:targetApi="31">@color/green</item>
+        <item name="android:windowSplashScreenAnimatedIcon" tools:targetApi="31">@android:color/transparent</item>
     </style>
 
     <style name="ShapeAppearance.EcoTrack.Circle" parent="">
