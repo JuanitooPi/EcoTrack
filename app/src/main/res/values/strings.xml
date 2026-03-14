@@ -2,4 +2,18 @@
     <string name="app_name">EcoTrack</string>
     <string name="navigation_drawer_open">Abrir menú</string>
     <string name="navigation_drawer_close">Cerrar menú</string>
+    <string name="error_usuario_vacio">Ingrese usuario</string>
+    <string name="error_password_vacio">Ingrese contraseña</string>
+    <string name="iniciando_sesion">Iniciando sesión...</string>
+    <string name="usuario_default_nombre">Operario ECOLIM</string>
+    <string name="usuario_default_email">operario@ecolim.com</string>
+    <string name="usuario_default_rol">Recolector</string>
+    <string name="bienvenido">Bienvenido %s</string>
+    <string name="error_credenciales">Usuario o contraseña incorrectos</string>
+    <string name="iniciar_sesion">Iniciar Sesión</string>
+    <string name="profile_image_description">Foto de perfil</string>
+    <string name="usuario_hint">Usuario</string>
+    <string name="password_hint">Contraseña</string>
+    <string name="no_tienes_cuenta">¿No tienes una cuenta? </string>
+    <string name="registrate_aqui">Regístrate aquí</string>
 </resources>

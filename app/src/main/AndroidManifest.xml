@@ -61,6 +61,9 @@
         <activity
             android:name=".ReportesActivity"
             android:exported="false" />
+        <activity
+            android:name=".RegisterActivity"
+            android:exported="false" />
 
     </application>
 

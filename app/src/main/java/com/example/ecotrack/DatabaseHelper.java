@@ -214,6 +214,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return false;
     }
 
+    /**
+     * Verificar si un usuario o email ya existen
+     */
+    public boolean usuarioExiste(String usuario, String email) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT * FROM " + TABLE_USUARIOS + " WHERE "
+                + COLUMN_NOMBRE + " = ? OR " + COLUMN_EMAIL + " = ?";
+        Cursor cursor = db.rawQuery(query, new String[]{usuario, email});
+
+        boolean existe = cursor.getCount() > 0;
+        cursor.close();
+        db.close();
+        return existe;
+    }
+
     // ==================== MÉTODOS PARA RESIDUOS (ACTUALIZADOS) ====================
 
     /**

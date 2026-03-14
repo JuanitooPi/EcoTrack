@@ -14,9 +14,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private EditText etUsuario, etPassword;
+    private EditText etUsuario;
+    private EditText etPassword;
     private Button btnLogin;
     private TextView tvMensaje;
+    private TextView tvRegistrarse;
     private SessionManager sessionManager;
     private DatabaseHelper dbHelper;
 
@@ -39,8 +41,22 @@ public class LoginActivity extends AppCompatActivity {
         etPassword = findViewById(R.id.etPassword);
         btnLogin = findViewById(R.id.btnLogin);
         tvMensaje = findViewById(R.id.tvMensaje);
+        tvRegistrarse = findViewById(R.id.tvRegistrarse);
 
-        btnLogin.setOnClickListener(v -> iniciarSesion());
+        btnLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                iniciarSesion();
+            }
+        });
+
+        tvRegistrarse.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void initDatabase() {
@@ -54,41 +70,45 @@ public class LoginActivity extends AppCompatActivity {
 
         // Validar campos vacíos
         if (TextUtils.isEmpty(usuario)) {
-            etUsuario.setError("Ingrese usuario");
+            etUsuario.setError(getString(R.string.error_usuario_vacio));
             return;
         }
 
         if (TextUtils.isEmpty(password)) {
-            etPassword.setError("Ingrese contraseña");
+            etPassword.setError(getString(R.string.error_password_vacio));
             return;
         }
 
         // Mostrar progreso
         btnLogin.setEnabled(false);
-        btnLogin.setText("Iniciando sesión...");
+        btnLogin.setText(R.string.iniciando_sesion);
 
-        // Simular validación (en un caso real sería consulta a BD)
-        new Handler().postDelayed(() -> {
-            // Para este ejemplo, usamos credenciales fijas
-            // En un caso real, usarías dbHelper.obtenerUsuarioPorCredenciales(usuario, password)
-            if (usuario.equals("ecolim") && password.equals("123456")) {
-                // Crear objeto usuario
-                Usuario user = new Usuario();
-                user.setId(1);
-                user.setNombre("Operario ECOLIM");
-                user.setEmail("operario@ecolim.com");
-                user.setRol("Recolector");
+        // Simular validación
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                // Por ahora usamos credenciales fijas
+                if (usuario.equals("ecolim") && password.equals("123456")) {
+                    // Crear objeto usuario
+                    Usuario user = new Usuario();
+                    user.setId(1);
+                    user.setNombre(getString(R.string.usuario_default_nombre));
+                    user.setEmail(getString(R.string.usuario_default_email));
+                    user.setRol(getString(R.string.usuario_default_rol));
 
-                // Guardar sesión
-                sessionManager.crearSesion(user);
+                    // Guardar sesión
+                    sessionManager.crearSesion(user);
 
-                Toast.makeText(LoginActivity.this, "Bienvenido " + user.getNombre(), Toast.LENGTH_SHORT).show();
-                irAlDashboard();
-            } else {
-                tvMensaje.setVisibility(View.VISIBLE);
-                tvMensaje.setText("Usuario o contraseña incorrectos");
-                btnLogin.setEnabled(true);
-                btnLogin.setText("Iniciar Sesión");
+                    Toast.makeText(LoginActivity.this,
+                            getString(R.string.bienvenido, user.getNombre()),
+                            Toast.LENGTH_SHORT).show();
+                    irAlDashboard();
+                } else {
+                    tvMensaje.setVisibility(View.VISIBLE);
+                    tvMensaje.setText(R.string.error_credenciales);
+                    btnLogin.setEnabled(true);
+                    btnLogin.setText(R.string.iniciar_sesion);
+                }
             }
         }, 1500);
     }
