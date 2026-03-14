@@ -1,13 +1,22 @@
 <resources>
     <style name="Theme.EcoTrack" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Primary brand color. -->
         <item name="colorPrimary">@color/green</item>
         <item name="colorPrimaryVariant">@color/green</item>
         <item name="colorOnPrimary">@color/white</item>
+        <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/green</item>
+        <item name="colorOnSecondary">@color/white</item>
+        <!-- Status bar color. -->
         <item name="android:statusBarColor">@color/green</item>
+
+        <!-- Material surface colors -->
+        <item name="colorSurface">@color/white</item>
+        <item name="colorOnSurface">@color/black</item>
+        <item name="android:windowBackground">?android:attr/colorBackground</item>
     </style>
 
-    <style name="ShapeAppearance.EcoTrack.Circle" parent="">
+    <style name="ShapeAppearance.EcoTrack.Circle" parent="ShapeAppearance.MaterialComponents.SmallComponent">
         <item name="cornerSize">50%</item>
     </style>
 

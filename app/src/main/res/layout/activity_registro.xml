@@ -58,7 +58,8 @@
                     app:boxStrokeColor="@color/green"
                     app:boxStrokeWidth="2dp"
                     app:hintEnabled="false"
-                    android:textColorHint="?android:attr/textColorSecondary">
+                    android:textColorHint="?android:attr/textColorSecondary"
+                    app:endIconTint="?android:attr/textColorSecondary">
 
                     <com.google.android.material.textfield.MaterialAutoCompleteTextView
                         android:id="@+id/actTipo"
@@ -70,7 +71,7 @@
                         android:paddingEnd="16dp"
                         android:background="@android:color/transparent"
                         android:dropDownVerticalOffset="8dp"
-                        android:popupBackground="@drawable/rounded_dropdown_background"
+                        android:popupBackground="?attr/colorSurface"
                         android:inputType="none"
                         android:textColor="?android:attr/textColorPrimary"/>
                 </com.google.android.material.textfield.TextInputLayout>
@@ -128,7 +129,8 @@
                     app:boxStrokeColor="@color/green"
                     app:boxStrokeWidth="2dp"
                     app:hintEnabled="false"
-                    android:textColorHint="?android:attr/textColorSecondary">
+                    android:textColorHint="?android:attr/textColorSecondary"
+                    app:endIconTint="?android:attr/textColorSecondary">
 
                     <com.google.android.material.textfield.MaterialAutoCompleteTextView
                         android:id="@+id/actUnidad"
@@ -140,7 +142,7 @@
                         android:paddingEnd="16dp"
                         android:background="@android:color/transparent"
                         android:dropDownVerticalOffset="8dp"
-                        android:popupBackground="@drawable/rounded_dropdown_background"
+                        android:popupBackground="?attr/colorSurface"
                         android:inputType="none"
                         android:textColor="?android:attr/textColorPrimary"/>
                 </com.google.android.material.textfield.TextInputLayout>

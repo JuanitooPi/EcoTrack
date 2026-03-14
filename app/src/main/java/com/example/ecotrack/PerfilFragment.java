@@ -17,6 +17,8 @@ import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
 
@@ -24,7 +26,7 @@ public class PerfilFragment extends Fragment {
 
     private TextView tvNombre, tvRol, tvEmail, tvTotalRegistros, tvTotalKg;
     private Button btnEditarPerfil, btnCambiarPassword, btnCerrarSesion;
-    private TextView btnAyuda, btnPrivacidad;
+    private TextView btnAyuda, btnPrivacidad; 
     private ImageView imagenPerfil;
     private RadioGroup rgTema;
     private RadioButton rbSistema, rbClaro, rbOscuro;
@@ -41,17 +43,28 @@ public class PerfilFragment extends Fragment {
     );
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_perfil, container, false);
-
-        initViews(view);
-        initDatabase();
-        cargarDatosPerfil();
-        setupThemeSelection();
-        setupListeners();
-
-        return view;
+        try {
+            View view = inflater.inflate(R.layout.fragment_perfil, container, false);
+            
+            // 1. Inicializar base de datos y sesión PRIMERO
+            initDatabase();
+            
+            // 2. Inicializar vistas
+            initViews(view);
+            
+            // 3. Configurar datos y eventos
+            cargarDatosPerfil();
+            setupThemeSelection();
+            setupListeners();
+            
+            return view;
+        } catch (Exception e) {
+            android.util.Log.e("PerfilFragment", "Error al inflar la vista de perfil", e);
+            Toast.makeText(getContext(), "Error al cargar el perfil", Toast.LENGTH_LONG).show();
+            return new View(getContext()); // Retorna vista vacía para evitar crash
+        }
     }
 
     private void initViews(View view) {
@@ -73,11 +86,15 @@ public class PerfilFragment extends Fragment {
     }
 
     private void initDatabase() {
-        sessionManager = new SessionManager(requireContext());
-        dbHelper = new DatabaseHelper(requireContext());
+        if (getContext() != null) {
+            sessionManager = new SessionManager(requireContext());
+            dbHelper = new DatabaseHelper(requireContext());
+        }
     }
 
     private void setupThemeSelection() {
+        if (rgTema == null || sessionManager == null) return;
+
         int currentMode = sessionManager.getThemeMode();
         if (currentMode == AppCompatDelegate.MODE_NIGHT_YES) {
             rbOscuro.setChecked(true);
@@ -102,45 +119,54 @@ public class PerfilFragment extends Fragment {
     }
 
     private void setupListeners() {
-        imagenPerfil.setOnClickListener(v -> mostrarOpcionesFoto());
-        btnEditarPerfil.setOnClickListener(v -> mostrarDialogoEditarPerfil());
-        btnCambiarPassword.setOnClickListener(v -> mostrarDialogoCambiarPassword());
-        btnCerrarSesion.setOnClickListener(v -> cerrarSesion());
+        if (imagenPerfil != null) imagenPerfil.setOnClickListener(v -> mostrarOpcionesFoto());
+        if (btnEditarPerfil != null) btnEditarPerfil.setOnClickListener(v -> mostrarDialogoEditarPerfil());
+        if (btnCambiarPassword != null) btnCambiarPassword.setOnClickListener(v -> mostrarDialogoCambiarPassword());
+        if (btnCerrarSesion != null) btnCerrarSesion.setOnClickListener(v -> cerrarSesion());
 
-        btnAyuda.setOnClickListener(v -> 
-            Toast.makeText(requireContext(), "Redirigiendo al Centro de Ayuda...", Toast.LENGTH_SHORT).show()
-        );
+        if (btnAyuda != null) {
+            btnAyuda.setOnClickListener(v -> 
+                Toast.makeText(getContext(), "Redirigiendo al Centro de Ayuda...", Toast.LENGTH_SHORT).show()
+            );
+        }
 
-        btnPrivacidad.setOnClickListener(v -> 
-            Toast.makeText(requireContext(), "Cargando Política de Privacidad...", Toast.LENGTH_SHORT).show()
-        );
+        if (btnPrivacidad != null) {
+            btnPrivacidad.setOnClickListener(v -> 
+                Toast.makeText(getContext(), "Cargando Política de Privacidad...", Toast.LENGTH_SHORT).show()
+            );
+        }
     }
 
     private void cargarDatosPerfil() {
+        if (sessionManager == null) return;
         Usuario usuario = sessionManager.getUsuario();
+        if (usuario == null) return;
 
-        tvNombre.setText(usuario.getNombre());
-        tvRol.setText(usuario.getRol());
-        tvEmail.setText(usuario.getEmail());
+        if (tvNombre != null) tvNombre.setText(usuario.getNombre());
+        if (tvRol != null) tvRol.setText(usuario.getRol());
+        if (tvEmail != null) tvEmail.setText(usuario.getEmail());
 
-        if (usuario.getFoto() != null && !usuario.getFoto().isEmpty()) {
-            try {
-                imagenPerfil.setImageURI(Uri.parse(usuario.getFoto()));
-            } catch (Exception e) {
+        if (imagenPerfil != null) {
+            if (usuario.getFoto() != null && !usuario.getFoto().isEmpty()) {
+                try {
+                    imagenPerfil.setImageURI(Uri.parse(usuario.getFoto()));
+                } catch (Exception e) {
+                    imagenPerfil.setImageResource(R.drawable.perfil);
+                }
+            } else {
                 imagenPerfil.setImageResource(R.drawable.perfil);
             }
-        } else {
-            imagenPerfil.setImageResource(R.drawable.perfil);
         }
 
-        int total = dbHelper.contarResiduosPorUsuario(usuario.getId());
-        tvTotalRegistros.setText(String.valueOf(total));
-        
-        // Simulación de carga de Kg totales (esto debería venir de ResiduoDAO)
-        tvTotalKg.setText(String.format("%.1f", 12.5)); 
+        if (dbHelper != null) {
+            int total = dbHelper.contarResiduosPorUsuario(usuario.getId());
+            if (tvTotalRegistros != null) tvTotalRegistros.setText(String.valueOf(total));
+        }
+        if (tvTotalKg != null) tvTotalKg.setText("0.0 kg"); 
     }
 
     private void mostrarOpcionesFoto() {
+        if (getContext() == null) return;
         String[] opciones = {"Cambiar foto", "Eliminar foto", "Cancelar"};
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
         builder.setTitle("Foto de perfil");
@@ -155,10 +181,11 @@ public class PerfilFragment extends Fragment {
     }
 
     private void actualizarFoto(Uri uri) {
+        if (getContext() == null || sessionManager == null || dbHelper == null) return;
         try {
             requireContext().getContentResolver().takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
         } catch (Exception e) {
-            e.printStackTrace();
+            android.util.Log.e("PerfilFragment", "Error permisos URI", e);
         }
 
         String fotoStr = uri.toString();
@@ -166,21 +193,23 @@ public class PerfilFragment extends Fragment {
 
         if (dbHelper.actualizarFotoUsuario(usuarioId, fotoStr)) {
             sessionManager.actualizarFoto(fotoStr);
-            imagenPerfil.setImageURI(uri);
-            Toast.makeText(requireContext(), "Foto actualizada", Toast.LENGTH_SHORT).show();
+            if (imagenPerfil != null) imagenPerfil.setImageURI(uri);
+            Toast.makeText(getContext(), "Foto actualizada", Toast.LENGTH_SHORT).show();
         }
     }
 
     private void eliminarFoto() {
+        if (sessionManager == null || dbHelper == null) return;
         int usuarioId = sessionManager.getUsuarioId();
         if (dbHelper.actualizarFotoUsuario(usuarioId, null)) {
             sessionManager.actualizarFoto(null);
-            imagenPerfil.setImageResource(R.drawable.perfil);
-            Toast.makeText(requireContext(), "Foto eliminada", Toast.LENGTH_SHORT).show();
+            if (imagenPerfil != null) imagenPerfil.setImageResource(R.drawable.perfil);
+            Toast.makeText(getContext(), "Foto eliminada", Toast.LENGTH_SHORT).show();
         }
     }
 
     private void mostrarDialogoEditarPerfil() {
+        if (getContext() == null || sessionManager == null) return;
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
         View dialogView = getLayoutInflater().inflate(R.layout.dialog_editar_perfil, null);
         builder.setView(dialogView);
@@ -192,9 +221,11 @@ public class PerfilFragment extends Fragment {
         Button btnGuardar = dialogView.findViewById(R.id.btnGuardar);
 
         Usuario usuario = sessionManager.getUsuario();
-        etNombre.setText(usuario.getNombre());
-        etEmail.setText(usuario.getEmail());
-        etRol.setText(usuario.getRol());
+        if (usuario != null) {
+            etNombre.setText(usuario.getNombre());
+            etEmail.setText(usuario.getEmail());
+            etRol.setText(usuario.getRol());
+        }
 
         AlertDialog dialog = builder.create();
         btnCancelar.setOnClickListener(v -> dialog.dismiss());
@@ -205,10 +236,10 @@ public class PerfilFragment extends Fragment {
 
             if (!nuevoNombre.isEmpty()) {
                 sessionManager.actualizarPerfil(nuevoNombre, nuevoEmail, nuevoRol);
-                tvNombre.setText(nuevoNombre);
-                tvEmail.setText(nuevoEmail);
-                tvRol.setText(nuevoRol);
-                Toast.makeText(requireContext(), "Perfil actualizado", Toast.LENGTH_SHORT).show();
+                if (tvNombre != null) tvNombre.setText(nuevoNombre);
+                if (tvEmail != null) tvEmail.setText(nuevoEmail);
+                if (tvRol != null) tvRol.setText(nuevoRol);
+                Toast.makeText(getContext(), "Perfil actualizado", Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
             }
         });
@@ -216,6 +247,7 @@ public class PerfilFragment extends Fragment {
     }
 
     private void mostrarDialogoCambiarPassword() {
+        if (getContext() == null || sessionManager == null || dbHelper == null) return;
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
         View dialogView = getLayoutInflater().inflate(R.layout.dialog_cambiar_password, null);
         builder.setView(dialogView);
@@ -239,7 +271,7 @@ public class PerfilFragment extends Fragment {
             }
 
             if (dbHelper.cambiarPassword(sessionManager.getUsuarioId(), actual, nueva)) {
-                Toast.makeText(requireContext(), "Contraseña actualizada", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Contraseña actualizada", Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
             } else {
                 etPasswordActual.setError("Contraseña incorrecta");
@@ -249,9 +281,11 @@ public class PerfilFragment extends Fragment {
     }
 
     private void cerrarSesion() {
-        sessionManager.cerrarSesion();
-        requireActivity().finish();
-        startActivity(new Intent(requireContext(), LoginActivity.class));
+        if (sessionManager != null) {
+            sessionManager.cerrarSesion();
+            requireActivity().finish();
+            startActivity(new Intent(getContext(), LoginActivity.class));
+        }
     }
 
     @Override

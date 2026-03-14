@@ -183,8 +183,8 @@
 
                 <View android:layout_width="match_parent" android:layout_height="1dp" android:background="?android:attr/listDivider" android:layout_marginVertical="12dp"/>
 
-                <!-- Notificaciones -->
-                <com.google.android.material.materialswitch.MaterialSwitch
+                <!-- Notificaciones (CAMBIADO A SwitchMaterial para compatibilidad) -->
+                <com.google.android.material.switchmaterial.SwitchMaterial
                     android:id="@+id/switchNotificaciones"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -223,7 +223,8 @@
                     android:layout_height="50dp"
                     android:text="Centro de Ayuda"
                     android:gravity="center_vertical"
-                    android:paddingHorizontal="16dp"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
                     android:clickable="true"
                     android:focusable="true"
                     android:background="?selectableItemBackground"/>
@@ -236,7 +237,8 @@
                     android:layout_height="50dp"
                     android:text="Política de Privacidad"
                     android:gravity="center_vertical"
-                    android:paddingHorizontal="16dp"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
                     android:clickable="true"
                     android:focusable="true"
                     android:background="?selectableItemBackground"/>
@@ -248,7 +250,8 @@
                     android:layout_height="50dp"
                     android:orientation="horizontal"
                     android:gravity="center_vertical"
-                    android:paddingHorizontal="16dp">
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp">
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
