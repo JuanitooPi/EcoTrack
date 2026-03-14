@@ -6,7 +6,8 @@
     android:layout_height="wrap_content"
     android:layout_margin="4dp"
     app:cardCornerRadius="8dp"
-    app:cardElevation="2dp">
+    app:cardElevation="2dp"
+    app:cardBackgroundColor="?attr/colorSurface">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -27,13 +28,15 @@
                 android:layout_weight="1"
                 android:text="Tipo"
                 android:textSize="16sp"
-                android:textStyle="bold"/>
+                android:textStyle="bold"
+                android:textColor="?android:attr/textColorPrimary"/>
 
             <TextView
                 android:id="@+id/tvSincronizado"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="12sp"/>
+                android:textSize="12sp"
+                android:textColor="?android:attr/textColorSecondary"/>
         </LinearLayout>
 
         <TextView
@@ -42,7 +45,8 @@
             android:layout_height="wrap_content"
             android:text="Cantidad"
             android:textSize="14sp"
-            android:layout_marginTop="4dp"/>
+            android:layout_marginTop="4dp"
+            android:textColor="?android:attr/textColorPrimary"/>
 
         <TextView
             android:id="@+id/tvFechaHora"
@@ -50,7 +54,7 @@
             android:layout_height="wrap_content"
             android:text="Fecha y Hora"
             android:textSize="12sp"
-            android:textColor="@android:color/darker_gray"/>
+            android:textColor="?android:attr/textColorSecondary"/>
 
         <TextView
             android:id="@+id/tvUbicacion"
@@ -58,7 +62,7 @@
             android:layout_height="wrap_content"
             android:text="Ubicación"
             android:textSize="12sp"
-            android:textColor="@android:color/darker_gray"
+            android:textColor="?android:attr/textColorSecondary"
             android:layout_marginTop="2dp"/>
 
     </LinearLayout>

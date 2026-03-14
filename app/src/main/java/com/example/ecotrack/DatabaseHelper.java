@@ -196,6 +196,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return rowsAffected;
     }
 
+    public boolean actualizarFotoUsuario(int usuarioId, String fotoUri) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_FOTO, fotoUri);
+
+        int rowsAffected = db.update(TABLE_USUARIOS, values,
+                COLUMN_USUARIO_ID + " = ?",
+                new String[]{String.valueOf(usuarioId)});
+        db.close();
+        return rowsAffected > 0;
+    }
+
     /**
      * Cambiar contraseña
      */

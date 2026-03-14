@@ -10,6 +10,7 @@ public class SessionManager {
     private static final String KEY_NOMBRE = "nombre";
     private static final String KEY_EMAIL = "email";
     private static final String KEY_ROL = "rol";
+    private static final String KEY_FOTO = "foto";
     private static final String KEY_IS_LOGGED_IN = "isLoggedIn";
     private static final String KEY_THEME = "theme_mode";
 
@@ -28,6 +29,7 @@ public class SessionManager {
         editor.putString(KEY_NOMBRE, usuario.getNombre());
         editor.putString(KEY_EMAIL, usuario.getEmail());
         editor.putString(KEY_ROL, usuario.getRol());
+        editor.putString(KEY_FOTO, usuario.getFoto());
         editor.putBoolean(KEY_IS_LOGGED_IN, true);
         editor.commit();
     }
@@ -38,6 +40,7 @@ public class SessionManager {
         usuario.setNombre(pref.getString(KEY_NOMBRE, null));
         usuario.setEmail(pref.getString(KEY_EMAIL, null));
         usuario.setRol(pref.getString(KEY_ROL, null));
+        usuario.setFoto(pref.getString(KEY_FOTO, null));
         return usuario;
     }
 
@@ -46,7 +49,10 @@ public class SessionManager {
     }
 
     public void cerrarSesion() {
+        // Preservar el tema al cerrar sesión
+        int theme = getThemeMode();
         editor.clear();
+        editor.putInt(KEY_THEME, theme);
         editor.commit();
     }
 
@@ -54,6 +60,11 @@ public class SessionManager {
         editor.putString(KEY_NOMBRE, nombre);
         editor.putString(KEY_EMAIL, email);
         editor.putString(KEY_ROL, rol);
+        editor.commit();
+    }
+
+    public void actualizarFoto(String fotoUri) {
+        editor.putString(KEY_FOTO, fotoUri);
         editor.commit();
     }
 

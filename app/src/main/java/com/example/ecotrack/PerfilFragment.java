@@ -2,17 +2,21 @@ package com.example.ecotrack;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
 
@@ -20,11 +24,21 @@ public class PerfilFragment extends Fragment {
 
     private TextView tvNombre, tvRol, tvEmail, tvTotalRegistros, tvTotalKg;
     private Button btnEditarPerfil, btnCambiarPassword, btnCerrarSesion;
+    private ImageView imagenPerfil;
     private RadioGroup rgTema;
     private RadioButton rbSistema, rbClaro, rbOscuro;
     private SessionManager sessionManager;
     private DatabaseHelper dbHelper;
-    private ResiduoDAO residuoDAO;
+
+    // Selector de imágenes de la galería
+    private final ActivityResultLauncher<String> galleryLauncher = registerForActivityResult(
+            new ActivityResultContracts.GetContent(),
+            uri -> {
+                if (uri != null) {
+                    actualizarFoto(uri);
+                }
+            }
+    );
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -41,6 +55,7 @@ public class PerfilFragment extends Fragment {
     }
 
     private void initViews(View view) {
+        imagenPerfil = view.findViewById(R.id.imagenPerfil);
         tvNombre = view.findViewById(R.id.tvNombre);
         tvRol = view.findViewById(R.id.tvRol);
         tvEmail = view.findViewById(R.id.tvEmail);
@@ -58,7 +73,6 @@ public class PerfilFragment extends Fragment {
     private void initDatabase() {
         sessionManager = new SessionManager(requireContext());
         dbHelper = new DatabaseHelper(requireContext());
-        residuoDAO = new ResiduoDAO(dbHelper);
     }
 
     private void setupThemeSelection() {
@@ -86,6 +100,7 @@ public class PerfilFragment extends Fragment {
     }
 
     private void setupListeners() {
+        imagenPerfil.setOnClickListener(v -> mostrarOpcionesFoto());
         btnEditarPerfil.setOnClickListener(v -> mostrarDialogoEditarPerfil());
         btnCambiarPassword.setOnClickListener(v -> mostrarDialogoCambiarPassword());
         btnCerrarSesion.setOnClickListener(v -> cerrarSesion());
@@ -98,19 +113,62 @@ public class PerfilFragment extends Fragment {
         tvRol.setText(usuario.getRol());
         tvEmail.setText(usuario.getEmail());
 
-        // Contar registros totales del usuario
+        // Cargar imagen si existe
+        if (usuario.getFoto() != null && !usuario.getFoto().isEmpty()) {
+            imagenPerfil.setImageURI(Uri.parse(usuario.getFoto()));
+        } else {
+            imagenPerfil.setImageResource(R.drawable.perfil); // Imagen por defecto
+        }
+
         int total = dbHelper.contarResiduosPorUsuario(usuario.getId());
         tvTotalRegistros.setText(String.valueOf(total));
+        tvTotalKg.setText(String.format("%.1f kg", 0.0)); // Placeholder
+    }
 
-        // Calcular total de kg (simplificado)
-        double totalKg = 0;
-        tvTotalKg.setText(String.format("%.1f kg", totalKg));
+    private void mostrarOpcionesFoto() {
+        String[] opciones = {"Cambiar foto", "Eliminar foto", "Cancelar"};
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        builder.setTitle("Foto de perfil");
+        builder.setItems(opciones, (dialog, which) -> {
+            if (which == 0) {
+                galleryLauncher.launch("image/*");
+            } else if (which == 1) {
+                eliminarFoto();
+            }
+        });
+        builder.show();
+    }
+
+    private void actualizarFoto(Uri uri) {
+        // Otorgar permisos persistentes a la URI (necesario en Android moderno)
+        try {
+            requireContext().getContentResolver().takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        String fotoStr = uri.toString();
+        int usuarioId = sessionManager.getUsuarioId();
+
+        if (dbHelper.actualizarFotoUsuario(usuarioId, fotoStr)) {
+            sessionManager.actualizarFoto(fotoStr);
+            imagenPerfil.setImageURI(uri);
+            Toast.makeText(requireContext(), "Foto actualizada", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void eliminarFoto() {
+        int usuarioId = sessionManager.getUsuarioId();
+        if (dbHelper.actualizarFotoUsuario(usuarioId, null)) {
+            sessionManager.actualizarFoto(null);
+            imagenPerfil.setImageResource(R.drawable.perfil);
+            Toast.makeText(requireContext(), "Foto eliminada", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void mostrarDialogoEditarPerfil() {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
-        LayoutInflater inflater = getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.dialog_editar_perfil, null);
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_editar_perfil, null);
         builder.setView(dialogView);
 
         EditText etNombre = dialogView.findViewById(R.id.etNombre);
@@ -119,45 +177,33 @@ public class PerfilFragment extends Fragment {
         Button btnCancelar = dialogView.findViewById(R.id.btnCancelar);
         Button btnGuardar = dialogView.findViewById(R.id.btnGuardar);
 
-        // Cargar datos actuales
         Usuario usuario = sessionManager.getUsuario();
         etNombre.setText(usuario.getNombre());
         etEmail.setText(usuario.getEmail());
         etRol.setText(usuario.getRol());
 
         AlertDialog dialog = builder.create();
-
         btnCancelar.setOnClickListener(v -> dialog.dismiss());
-
         btnGuardar.setOnClickListener(v -> {
             String nuevoNombre = etNombre.getText().toString().trim();
             String nuevoEmail = etEmail.getText().toString().trim();
             String nuevoRol = etRol.getText().toString().trim();
 
-            if (nuevoNombre.isEmpty()) {
-                etNombre.setError("Ingrese nombre");
-                return;
+            if (!nuevoNombre.isEmpty()) {
+                sessionManager.actualizarPerfil(nuevoNombre, nuevoEmail, nuevoRol);
+                tvNombre.setText(nuevoNombre);
+                tvEmail.setText(nuevoEmail);
+                tvRol.setText(nuevoRol);
+                Toast.makeText(requireContext(), "Perfil actualizado", Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
             }
-
-            // Actualizar en SharedPreferences
-            sessionManager.actualizarPerfil(nuevoNombre, nuevoEmail, nuevoRol);
-
-            // Actualizar vistas
-            tvNombre.setText(nuevoNombre);
-            tvEmail.setText(nuevoEmail);
-            tvRol.setText(nuevoRol);
-
-            Toast.makeText(requireContext(), "Perfil actualizado", Toast.LENGTH_SHORT).show();
-            dialog.dismiss();
         });
-
         dialog.show();
     }
 
     private void mostrarDialogoCambiarPassword() {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
-        LayoutInflater inflater = getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.dialog_cambiar_password, null);
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_cambiar_password, null);
         builder.setView(dialogView);
 
         EditText etPasswordActual = dialogView.findViewById(R.id.etPasswordActual);
@@ -167,41 +213,24 @@ public class PerfilFragment extends Fragment {
         Button btnGuardar = dialogView.findViewById(R.id.btnGuardar);
 
         AlertDialog dialog = builder.create();
-
         btnCancelar.setOnClickListener(v -> dialog.dismiss());
-
         btnGuardar.setOnClickListener(v -> {
             String actual = etPasswordActual.getText().toString();
             String nueva = etPasswordNueva.getText().toString();
             String confirmar = etConfirmarPassword.getText().toString();
-
-            if (actual.isEmpty()) {
-                etPasswordActual.setError("Ingrese contraseña actual");
-                return;
-            }
-
-            if (nueva.isEmpty()) {
-                etPasswordNueva.setError("Ingrese nueva contraseña");
-                return;
-            }
 
             if (!nueva.equals(confirmar)) {
                 etConfirmarPassword.setError("Las contraseñas no coinciden");
                 return;
             }
 
-            // Actualizar en BD
-            Usuario usuario = sessionManager.getUsuario();
-            boolean exito = dbHelper.cambiarPassword(usuario.getId(), actual, nueva);
-
-            if (exito) {
-                Toast.makeText(requireContext(), "Contraseña actualizada correctamente", Toast.LENGTH_SHORT).show();
+            if (dbHelper.cambiarPassword(sessionManager.getUsuarioId(), actual, nueva)) {
+                Toast.makeText(requireContext(), "Contraseña actualizada", Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
             } else {
-                etPasswordActual.setError("La contraseña actual es incorrecta");
+                etPasswordActual.setError("Contraseña incorrecta");
             }
         });
-
         dialog.show();
     }
 
